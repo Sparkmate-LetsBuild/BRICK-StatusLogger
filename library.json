@@ -20,7 +20,7 @@
     ],
     "license": "MIT",
     "dependencies": {
-        "paulo-raca/ArduinoBufferedStreams": "~1.0.5",
+        "paulo-raca/ArduinoBufferedStreams": "git@github.com:paulo-raca/ArduinoBufferedStreams.git@^1.0.5",
         "PaulStoffregen/Time": "~1.6.1"
     },
     "frameworks": "*",
