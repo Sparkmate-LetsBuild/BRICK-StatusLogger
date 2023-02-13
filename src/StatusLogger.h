@@ -219,7 +219,7 @@ namespace StatusLogger
     /**
      * @brief Set the session details at the beginning of operation. Set once and forget!
      *
-     * @param device_ID The id of this monitor box (e.g. Jennifer)
+     * @param device_ID The id of this device (e.g. Jennifer)
      * @param session_FILENAME The filename of this session (e.g. Jennifer-{data}-0)
      * @param session_start_time The start time of the session
      */

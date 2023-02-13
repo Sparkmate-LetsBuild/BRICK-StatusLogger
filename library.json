@@ -1,30 +1,28 @@
 {
     "name": "StatusLogger",
     "version": "0.0.1",
-    "description": "An advanced status logger \"Hello world\" program is a computer program that outputs \"Hello World\" (or some variant) on a display device",
+    "description": "An advanced status logger to write and recall logs and brick statuses.",
     "keywords": "status logger, sparkmate, lets build",
-    "repository":
-    {
-      "type": "git",
-      "url": "https://github.com/username/hello-world.git"
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Sparkmate-LetsBuild/BRICK-StatusLogger.git"
     },
-    "authors":
-    [
-      {
-        "name": "The Lets Build team",
-        "email": "letsbuild@sparkmate.co",
-        "maintainer": true
-      },
-      {
-        "name": "Matthew Stedman",
-        "email": "matthew@sparkmate.co"
-      }
+    "authors": [
+        {
+            "name": "the Lets Build team",
+            "email": "letsbuild@sparkmate.co",
+            "maintainer": true
+        },
+        {
+            "name": "Matthew Stedman",
+            "email": "matthew@sparkmate.co"
+        }
     ],
     "license": "MIT",
     "dependencies": {
-      "vshymanskyy/StreamDebugger": "~1.0.1",
-      "PaulStoffregen/Time": "~1.6.1"
+        "paulo-raca/ArduinoBufferedStreams": "~1.0.5",
+        "PaulStoffregen/Time": "~1.6.1"
     },
     "frameworks": "*",
     "platforms": "*"
-  }
+}
