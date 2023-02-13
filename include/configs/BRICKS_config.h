@@ -1,8 +1,6 @@
 #pragma once
 #define BRICKS_config_h
 
-#include <Arduino.h>
-
 // -- EXAMPLE BRICKS LOGGER HANDLER
 const String NAME_ACCEL = "ACCEL";           // Log something to do with the accelerometer
 const String NAME_SD = "SD";                 // '' SD
