@@ -26,8 +26,6 @@
 #endif
 #define MAX_BRICK_STATUSES 20
 
-#define EOL '\n'
-
 namespace StatusLogger
 {
     namespace // "private" namespace. Makes it cleaner for humans (that's you!) to read.
@@ -236,7 +234,7 @@ namespace StatusLogger
      */
     void printSessionDetails()
     {
-        log(LEVEL_STATS, StatusLogger::NAME_ESP32, String(EOL) + "-- SESSION DETAILS --", true);
+        log(LEVEL_STATS, StatusLogger::NAME_ESP32, "-- SESSION DETAILS --", true);
         log(LEVEL_STATS, StatusLogger::NAME_ESP32, "Device ID: " + session_details.device_ID, true);
         log(LEVEL_STATS, StatusLogger::NAME_ESP32, "Session name: " + session_details.session_ID, true);
         log(LEVEL_STATS, StatusLogger::NAME_ESP32, "Session start time: " + String(session_details.session_start_time), true);
