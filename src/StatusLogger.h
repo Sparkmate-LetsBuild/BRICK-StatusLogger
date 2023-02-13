@@ -109,6 +109,11 @@ namespace StatusLogger
      */
     void log(LOG_LEVEL_td level, String device, String msg, bool print_to_serial = false, Stream *stream = &Serial)
     {
+        if (level > LOG_LEVEL_PRINT && print_to_serial != true)
+        {
+            return;
+        }
+        
         String str = String(millis());
         str += " : ";
         str += device;
@@ -134,17 +139,15 @@ namespace StatusLogger
             break;
         }
 
-        if (level <= LOG_LEVEL_PRINT || print_to_serial == true)
+        if (stream == &Serial)
         {
-            if (stream == &Serial)
-            {
-                stream->println(color_format + str + "\033[0;39;49m");
-            }
-            else
-            {
-                stream->println(str);
-            }
+            stream->println(color_format + str + "\033[0;39;49m");
         }
+        else
+        {
+            stream->println(str);
+        }
+
         if (level <= LOG_LEVEL_SAVE)
         {
             LogsCacher.println(str);
@@ -158,7 +161,7 @@ namespace StatusLogger
      */
     void retrieveLogs(Stream *stream = &Serial)
     {
-        stream->println("\nRetrieving previous logs\n");
+        stream->println("\nSTATUS LOGGER -- Retrieving previous logs\n");
         while (LogsCacher.available())
         {
             Serial.write(LogsCacher.read());
@@ -169,8 +172,8 @@ namespace StatusLogger
     /**
      * @brief Update a brick's status (for example if internet failed).
      *  Automatically makes a log status update.
-     * @param device The device/brick that you are reporting on (e.g. NAME_ACCEL)
-     * @param functionality How functional the brick is (e.g. FUNCTIONALITY_FULL)
+     * @param device The device/brick that you are reporting on (e.g. NAME_INTERNET_MODULE)
+     * @param functionality How functional the brick is (e.g. FUNCTIONALITY_OFFLINE)
      * @param msg An optional message to explain how functional/unfunctional it is
      */
     void setBrickStatus(String device, LOG_FUNCTIONALITY_td functionality, String msg = "")
