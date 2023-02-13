@@ -25,9 +25,8 @@
 #define LOG_SIZE 4 * 1024 // 4 kb of log buffer
 #endif
 #define MAX_BRICK_STATUSES 20
-#define MAX_TRACKED_PINGS 12
 
-#define EOL "\n"
+#define EOL '\n'
 
 namespace StatusLogger
 {
@@ -42,8 +41,6 @@ namespace StatusLogger
             String device_ID = "";
             String session_ID;
             time_t session_start_time;
-            time_t PINGS_SUCCESSFUL[MAX_TRACKED_PINGS] = {};
-            time_t PINGS_UNSUCCESSFUL[MAX_TRACKED_PINGS] = {};
             bool session_reported_on_strapi = false;
         } SESSION_DETAILS;
 
