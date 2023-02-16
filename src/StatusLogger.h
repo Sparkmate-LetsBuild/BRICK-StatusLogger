@@ -30,6 +30,7 @@ namespace StatusLogger
 {
     namespace // "private" namespace. Makes it cleaner for humans (that's you!) to read.
     {
+        // Define types
         typedef String LOG_FUNCTIONALITY_td;
         typedef int LOG_LEVEL_td;
         typedef String LOG_NAME_td;
@@ -52,30 +53,8 @@ namespace StatusLogger
 
         namespace DeviceHealth
         {
-            int NumberOfFilesOnSD = 0;
-            int NumberOfFilesUnuploaded = 0;
-            BRICK_STATUS BrickStatuses[MAX_BRICK_STATUSES]; // Allow up to 20 brick reports
-        }
-
-        /**
-         * @brief Print a brick status into a Serial readible format.
-         *
-         * @param BrickStatus The status of the brick (in a brick status object)
-         * @returns a human-formatted String unpacking the brick status
-         */
-        String deconstructBrickStatus(BRICK_STATUS BrickStatus)
-        {
-            String str = String(BrickStatus.timestamp);
-            str += " : ";
-            str += BrickStatus.device;
-            str += " : ";
-            str += BrickStatus.functionality;
-            if (strcmp(BrickStatus.msg, "") != 0)
-            {
-                str += " : ";
-                str += BrickStatus.msg;
-            }
-            return str;
+            // You can add additional elements here if you need to.
+            BRICK_STATUS brick_statuses[MAX_BRICK_STATUSES]; // Allow up to 20 brick reports
         }
     }
 
@@ -97,6 +76,27 @@ namespace StatusLogger
     SESSION_DETAILS session_details;
 
     /**
+     * @brief Print a brick status into a Serial readible format.
+     *
+     * @param brick_status The status of the brick (in a brick status object)
+     * @returns a human-formatted String unpacking the brick status
+     */
+    String deconstructBrickStatus(BRICK_STATUS brick_status)
+    {
+        String str = String(brick_status.timestamp);
+        str += " : ";
+        str += brick_status.device;
+        str += " : ";
+        str += brick_status.functionality;
+        if (strcmp(brick_status.msg, "") != 0)
+        {
+            str += " : ";
+            str += brick_status.msg;
+        }
+        return str;
+    }
+
+    /**
      * @brief Log something to the StatusLogger system.
      *  If the (log) level is less than LOG_LEVEL_SAVE then we'll print both to Serial and to the cacher to be retrieved later (use sparingly)!
 
@@ -113,7 +113,7 @@ namespace StatusLogger
         {
             return;
         }
-        
+
         String str = String(millis());
         str += " : ";
         str += device;
@@ -170,7 +170,7 @@ namespace StatusLogger
     }
 
     /**
-     * @brief Update a brick's status (for example if internet failed).
+     * @brief Update a brick's status (for example if internet failed), options of: [FUNCTIONAL, PARTIAL, OFFLINE]
      *  Automatically makes a log status update.
      * @param device The device/brick that you are reporting on (e.g. NAME_INTERNET_MODULE)
      * @param functionality How functional the brick is (e.g. FUNCTIONALITY_OFFLINE)
@@ -180,23 +180,23 @@ namespace StatusLogger
     {
         // Check if the device already exists in the log
         int i;
-        for (i = 0; device.compareTo(DeviceHealth::BrickStatuses[i].device) != 0 && strcmp(DeviceHealth::BrickStatuses[i].device, "") != 0; i++)
+        for (i = 0; device.compareTo(DeviceHealth::brick_statuses[i].device) != 0 && strcmp(DeviceHealth::brick_statuses[i].device, "") != 0; i++)
         {
             ;
         }
 
         // Unpack info
-        device.toCharArray(DeviceHealth::BrickStatuses[i].device, sizeof(DeviceHealth::BrickStatuses[i].device)); // Doesn't matter if we re-write
-        functionality.toCharArray(DeviceHealth::BrickStatuses[i].functionality, sizeof(DeviceHealth::BrickStatuses[i].functionality));
-        msg.toCharArray(DeviceHealth::BrickStatuses[i].msg, sizeof(DeviceHealth::BrickStatuses[i].msg));
-        DeviceHealth::BrickStatuses[i].timestamp = now();
+        device.toCharArray(DeviceHealth::brick_statuses[i].device, sizeof(DeviceHealth::brick_statuses[i].device)); // Doesn't matter if we re-write
+        functionality.toCharArray(DeviceHealth::brick_statuses[i].functionality, sizeof(DeviceHealth::brick_statuses[i].functionality));
+        msg.toCharArray(DeviceHealth::brick_statuses[i].msg, sizeof(DeviceHealth::brick_statuses[i].msg));
+        DeviceHealth::brick_statuses[i].timestamp = now();
 
         // Set this in the logs too, so we can retrieve later if need be
         if (msg.compareTo("") != 0)
         {
             msg = ", " + msg;
         }
-        log(LEVEL_BRICK_STATUS_UPDATE, device, DeviceHealth::BrickStatuses[i].functionality + msg, true);
+        log(LEVEL_BRICK_STATUS_UPDATE, device, DeviceHealth::brick_statuses[i].functionality + msg, true);
     }
 
     /**
@@ -207,9 +207,9 @@ namespace StatusLogger
     void printBrickStatuses(Stream *stream = &Serial)
     {
         log(LEVEL_GOOD_NEWS, StatusLogger::NAME_ESP32, "-- BRICK STATUSES --", false, stream);
-        for (int i = 0; strcmp(DeviceHealth::BrickStatuses[i].device, "") != 0; i++)
+        for (int i = 0; strcmp(DeviceHealth::brick_statuses[i].device, "") != 0; i++)
         {
-            log(LEVEL_GOOD_NEWS, "BRICK STATUS", deconstructBrickStatus(DeviceHealth::BrickStatuses[i]), false, stream);
+            log(LEVEL_GOOD_NEWS, "BRICK STATUS", deconstructBrickStatus(DeviceHealth::brick_statuses[i]), false, stream);
         }
         log(LEVEL_GOOD_NEWS, StatusLogger::NAME_ESP32, "-- END OF BRICK STATUSES --", false, stream);
     }
@@ -218,10 +218,10 @@ namespace StatusLogger
      * @brief Set the session details at the beginning of operation. Set once and forget!
      *
      * @param device_ID The id of this device (e.g. Jennifer)
-     * @param session_FILENAME The filename of this session (e.g. Jennifer-{data}-0)
+     * @param session_filename The filename of this session (e.g. Jennifer-{data}-0)
      * @param session_start_time The start time of the session
      */
-    void setSessionDetails(String device_ID, String session_FILENAME, time_t session_start_time)
+    void setSessionDetails(String device_ID, String session_filename, time_t session_start_time)
     {
         if (session_details.device_ID != "")
         {
@@ -233,7 +233,7 @@ namespace StatusLogger
     }
 
     /**
-     * @brief Print only the session details to log
+     * @brief Print only the session details to Serial
      */
     void printSessionDetails()
     {
