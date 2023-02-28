@@ -200,6 +200,45 @@ namespace StatusLogger
     }
 
     /**
+     * @brief Return the index of a given brick's status.
+     *
+     * @param device The name of the device you want to return.
+     * @return -1 if the brick is not found, otherwise the index of the brick's status.
+     */
+    int getBrickStatusIndex(String device)
+    {
+
+        for (int i = 0; i < MAX_BRICK_STATUSES; i++)
+        {
+            if (String(DeviceHealth::brick_statuses[i].device).compareTo(device) == 0)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * @brief Get the Brick Status object at a given index.
+     *
+     * @param i The index of the brick status you want to return
+     * @returns The brick status at the given index. Return the final brick's status (which is probably empty if you have less than MAX_BRICK_STATUSES bricks) if the brick can't be found.
+     */
+    BRICK_STATUS getBrickStatus(int i)
+    {
+        // Check if the device already exists in the log
+        if (i >= 0 and i < MAX_BRICK_STATUSES)
+        {
+            return DeviceHealth::brick_statuses[i];
+        }
+        else
+        {
+            return DeviceHealth::brick_statuses[MAX_BRICK_STATUSES - 1];
+        }
+    }
+
+    /**
      * @brief Retrieve all of the latest brick statuses and print to logs
      *
      * @param stream An optional override to print the retrievedLogs elsewhere (like an opened file)
