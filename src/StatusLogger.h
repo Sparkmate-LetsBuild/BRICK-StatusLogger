@@ -239,6 +239,19 @@ namespace StatusLogger
     }
 
     /**
+     * @brief Compare if a given device has the same functionality status you're checking against.
+     *
+     * @param i The index of the brick status you want to return
+     * @param status The LOG_FUNCTIONALITY_td (status) you're checking against (e.g. FUNCTIONALITY_FULL)
+     * @returns True if the device at the given index has the same status, otherwise false
+     */
+    bool compareBrickStatusToFunctionality(int i, LOG_FUNCTIONALITY_td status)
+    {
+        // Check if the device already exists in the log
+        return strcmp(StatusLogger::getBrickStatus(i).functionality, status.c_str()) == 0;
+    }
+
+    /**
      * @brief Retrieve all of the latest brick statuses and print to logs
      *
      * @param stream An optional override to print the retrievedLogs elsewhere (like an opened file)
