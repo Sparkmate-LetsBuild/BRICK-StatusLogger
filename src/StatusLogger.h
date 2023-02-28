@@ -243,17 +243,17 @@ namespace StatusLogger
      *
      * @param i The index of the brick status you want to return
      * @param status The LOG_FUNCTIONALITY_td (status) you're checking against (e.g. FUNCTIONALITY_FULL)
-     * @returns True if the device at the given index has the same status, otherwise false
+     * @returns 1 if the device at the given index has the same status, 0 if the device exists at the given index but the status is not the same, and -1 if the device does not exist at the given index.
      */
-    bool evalBrickStatus(String device, LOG_FUNCTIONALITY_td status)
+    int evalBrickStatus(String device, LOG_FUNCTIONALITY_td status)
     {
         int index = getBrickStatusIndex(device);
         if (index == -1)
         {
-            return false;
+            return -1;
         }
         // Check if the device already exists in the log
-        return strcmp(StatusLogger::getBrickStatus(index).functionality, status.c_str()) == 0;
+        return strcmp(StatusLogger::getBrickStatus(index).functionality, status.c_str()) == 0 ? 1 : 0;
     }
 
     /**
