@@ -157,16 +157,14 @@ namespace StatusLogger
     /**
      * @brief Retrieve logs previously cached (good for log dumps of important logs as opposed to just Serial.print).
      *
-     * @param stream An optional override to print the retrievedLogs elsewhere (like an opened file)
+     * @param stream An optional override to print the retrievedLogs elsewhere (like an opened file on the SD card)
      */
     void retrieveLogs(Stream *stream = &Serial)
     {
-        stream->println("\nSTATUS LOGGER -- Retrieving previous logs\n");
         while (LogsCacher.available())
         {
-            Serial.write(LogsCacher.read());
+            stream->write(LogsCacher.read());
         }
-        stream->println("\nFinished retrieving previous logs\n");
     }
 
     /**
