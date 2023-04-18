@@ -141,7 +141,11 @@ namespace StatusLogger
 
         if (stream == &Serial)
         {
+#ifndef LOG_SUPPRESS_COLORING
             stream->println(color_format + str + "\033[0;39;49m");
+#else
+            stream->println(str);
+#endif
         }
         else
         {

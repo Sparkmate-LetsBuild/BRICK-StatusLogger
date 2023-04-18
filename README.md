@@ -8,6 +8,7 @@ A more advanced status logger that makes logging and status reporting easier. In
 -   Report the status of various bricks within your code (your sensors, actuators, components, etc.)
 -   Recall important logs and statusses at a later time
 -   Pipe logs and statuses to other Streams, e.g. a file on the SD card
+-   Colored logs to easily identify log levels. You can suppress this by defining `#define LOG_SUPRESS_COLORING` before your import of StatusLogger in `main.cpp`.
 
 ## Usage
 
